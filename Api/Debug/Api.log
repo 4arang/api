@@ -1,3 +1,4 @@
 ﻿  Api.cpp
-d:\api\api\api\api.cpp(150): error C2065: 'asdasdasd': 선언되지 않은 식별자입니다.
-d:\api\api\api\api.cpp(151): error C2146: 구문 오류: ';'이(가) 'EndPaint' 식별자 앞에 없습니다.
+d:\api\api\api\api.cpp(328): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(329): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Api.vcxproj -> D:\api\api\Debug\Api.exe
