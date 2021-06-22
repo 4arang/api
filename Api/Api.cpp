@@ -9,6 +9,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #define MAX_LOADSTRING 100
+#include <list>
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
@@ -20,6 +21,7 @@ struct Stars
 	int angle;
 	int r;
 };
+
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -36,6 +38,9 @@ void DrawStar(HDC hdc, POINT star, int r);
 void DrawRotatedStar(HDC hdc, POINT star, int r, double angle);
 Stars RandomlyRotatedStars(HDC hdc, int howmanyStars, POINT leftTop, POINT rightBottom, int maxSize, int minSize, Stars *stars);
 void DrawRandomlyRotatedStars(HDC hdc, int  howmanyStars, Stars  *stars);
+
+
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -70,12 +75,45 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-    }
+     }
 
     return (int) msg.wParam;
 }
 
+class CShape
+{
 
+	POINT PT;
+	POINT MovingPT;
+	int Speed = 10;
+	double Dir=0;
+	int R = 50;
+public:
+	//	CShape();
+	//	~CShape();
+	POINT GetPOINT() const { return PT; }
+	void SetPOINT(POINT p) { PT = p; }
+	POINT GetMPT() const { return MovingPT; }
+	void setMPT(POINT p) { MovingPT = p; }
+	int GetSpeed() const { return Speed; }
+	double GetDir() const { return Dir; }
+	void SetDir() { Dir = rand() % 360 * M_PI / 180; }
+	int GetR() const { return R; }
+
+	//	void update();
+	//	bool Collision();
+	virtual void DrawMe(HDC hdc) = 0;
+};
+
+class CCircle :public CShape
+{
+	//CCircle() : R(R) {}
+public:
+	void DrawMe(HDC hdc)
+	{
+		DrawCircle(hdc, GetPOINT().x, GetPOINT().y, GetR());
+	}
+};
 
 //
 //  함수: MyRegisterClass()
@@ -144,6 +182,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	HDC hdc;
+	
 //	static bool bKeyDown = false;
 	HPEN hPen, oldPen;
 	HBRUSH hBrush,oldBrush;
@@ -154,6 +193,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static SIZE size;
 	int howmanyStars = 95;
 	static struct Stars *stars = new Stars[howmanyStars];
+	static POINT ptCircle;
+	static POINT ptCircleTimer;
+	static POINT ptCircleClick;
+	int moveptCircleSpeed = 40;
+	static BOOL bSelected = false;
+	static POINT ptCirclemMove;
+	
+
+
+
+
+	static int j = -1;
+
+
+	static	CShape **circles = new CShape*[50];
+	if (j == -1)
+	{
+		for (int i = 0; i < 50; i++)
+		{
+			circles[i] = new CCircle;
+		}
+	}
+
+
+
+
+
+
     switch (message)
     {
     case WM_COMMAND:
@@ -178,8 +245,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		CreateCaret(hWnd, NULL, 5, 15);
 		ShowCaret(hWnd);
 
+		SetTimer(hWnd, 1, 100, NULL); //타이머설정 아이디, 간격ms, 함수
+		SetTimer(hWnd, 2, 100, NULL);
+		SetTimer(hWnd, 3, 100, NULL);
 	}
 		break;
+	case WM_SIZE : // wParam, IParam(HIWORD: H, LOWORD:W)창 사이즈 변경값 입력시
+	{
+		int breakpoint = 999; 
+	}
+	break;
 	case WM_CHAR :
 	{
 		
@@ -219,6 +294,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DrawRectangle(hdc, 1250, 350, 100, 200);
 			SelectObject(hdc, oldBrush);
 			DeleteObject(hBrush);
+
+			ptCircle.x += moveptCircleSpeed;
+
 		}
 		else if (wParam == VK_LEFT)
 		{
@@ -227,6 +305,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DrawRectangle(hdc, 1050, 350, 100, 200);
 			SelectObject(hdc, oldBrush);
 			DeleteObject(hBrush);
+
+			ptCircle.x -= moveptCircleSpeed;
+	
 		}
 		else if (wParam == VK_UP)
 		{
@@ -235,6 +316,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DrawRectangle(hdc, 1150, 150, 100, 200);
 			SelectObject(hdc, oldBrush);
 			DeleteObject(hBrush);
+
+			ptCircle.y -= moveptCircleSpeed;
+
 		}
 		else if(wParam == VK_DOWN)
 		{
@@ -243,7 +327,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DrawRectangle(hdc, 1150, 550, 100, 200);
 			SelectObject(hdc, oldBrush);
 			DeleteObject(hBrush);
+
+			ptCircle.y += moveptCircleSpeed;
+		
 		}
+		InvalidateRect(hWnd, NULL, TRUE);
 		ReleaseDC(hWnd, hdc);
 	}
 	
@@ -274,147 +362,251 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ReleaseDC(hWnd, hdc);
 	}
 	break;
+	case WM_TIMER :
+		switch(wParam)
+	{
+		case 1:
+		{
+
+		}
+		break;
+		case 2:
+		{
+			ptCircleTimer.x += 40;
+			ptCircleTimer.y += 40;
+		}
+		default:
+			break;
+		case 3:
+		{
+			if (j >= 0) {
+				circles[j]->setMPT({ circles[j]->GetMPT().x + (int)cos(circles[j]->GetDir()) * circles[j]->GetSpeed(),
+				circles[j]->GetMPT().y+ (int)sin(circles[j]->GetDir()) * circles[j]->GetSpeed() });
+			}
+		}
+		break;
+	}
+		InvalidateRect(hWnd, NULL, true);
+		break;
+
+	case WM_LBUTTONDOWN:
+	{
+		j++;
+	//	hdc = GetDC(hWnd);
+
+		circles[j]->SetPOINT({LOWORD(lParam), HIWORD(lParam)});
+
+		circles[j]->SetDir();
+
+		int breakpoint = 999;
+
+	//	bSelected = TRUE;
+	}
+	InvalidateRect(hWnd, NULL, true);
+	//ReleaseDC(hWnd, hdc);
+	break;
+	case WM_LBUTTONUP:
+	{
+		//bSelected = FALSE;
+	}
+	break;
+	case WM_RBUTTONDOWN:
+	{
+	}
+	break;
+	case WM_RBUTTONUP:
+	{
+
+	}
+	break;
+	case WM_MOUSEMOVE :
+	{
+		//if (bSelected)
+		//{
+		//	ptCirclemMove.x = LOWORD(lParam);
+		//	ptCirclemMove.y = HIWORD(lParam);
+		//	InvalidateRect(hWnd, NULL, true);
+		//}
+	}
+		break;
+		
     case WM_PAINT:
-        {
+	
+	{
 		PAINTSTRUCT ps;
 		hdc = BeginPaint(hWnd, &ps);
-            // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
-			//HDC hdc2 = GetDC(hWnd);
-			//ReleaseDC(hWnd, hdc2);
-		//	TextOut(hdc, 100, 100, _T("hello 안녕"), _tcslen(_T("hello 안녕")));
+		// TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
+		//HDC hdc2 = GetDC(hWnd);
+		//ReleaseDC(hWnd, hdc2);
+	//	TextOut(hdc, 100, 100, _T("hello 안녕"), _tcslen(_T("hello 안녕")));
 
-			//RECT rect;
-			//rect.left = 200;
-			//rect.top = 100;
-			//rect.right = 300;
-			//rect.bottom = 200;
-		
-
-		//	DrawText(hdc, _T("hello 안녕"), _tcslen(_T("hello 안녕")), &rect, DT_SINGLELINE
-		//	|DT_CENTER |DT_VCENTER);
-			//TextOut(hdc, 400, 400, _T("hello 안녕"), _tcslen(_T("hello 안녕")));
-			
-			//if(bKeyDown)
-		//	TextOut(hdc, 0, yPos,str, _tcslen(str));
-
-			//RECT rc = { 0, 0, 400, 400 };
-			//DrawText(hdc, str, _tcslen(str), &rc, DT_TOP | DT_LEFT);
-           
-			//GetTextExtentPoint(hdc, str, _tcslen(str), &size);
-		//	TextOut(hdc, 0, 0, str, _tcslen(str));
-		//SetCaretPos(size.cx, 0);
-			/*
-		격자 그리기 함수 DrawGrid() 구현
-		시작위치, 끝위치LeftTop, RightBottom .. RECTm POINT
-		DrawGrid(시작위치, 끝위치, 간격)
-		DrawGrid(중심위치, 간격, 선의 개수)
-		*/
-			POINT Gridpt = {700, 400};
-			DrawGrid(hdc, Gridpt.x, Gridpt.y, 10, 20, 100, 100);
+		//RECT rect;
+		//rect.left = 200;
+		//rect.top = 100;
+		//rect.right = 300;
+		//rect.bottom = 200;
 
 
-			
-			hPen = CreatePen(PS_SOLID, 1, RGB(255, 234, 050));
-			oldPen = (HPEN)SelectObject(hdc, hPen);
-			hBrush = CreateSolidBrush(RGB(255, 234, 050));
-			oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-			RandomlyRotatedStars(hdc, howmanyStars, { 0,0 }, { 1700,900 }, 28, 5, stars);
-			DrawRandomlyRotatedStars(hdc, howmanyStars, stars);
-			SelectObject(hdc, oldBrush);
-			DeleteObject(hBrush);
-			SelectObject(hdc, oldPen);
-			DeleteObject(hPen);
+	//	DrawText(hdc, _T("hello 안녕"), _tcslen(_T("hello 안녕")), &rect, DT_SINGLELINE
+	//	|DT_CENTER |DT_VCENTER);
+		//TextOut(hdc, 400, 400, _T("hello 안녕"), _tcslen(_T("hello 안녕")));
+
+		//if(bKeyDown)
+	//	TextOut(hdc, 0, yPos,str, _tcslen(str));
+
+		//RECT rc = { 0, 0, 400, 400 };
+		//DrawText(hdc, str, _tcslen(str), &rc, DT_TOP | DT_LEFT);
+
+		//GetTextExtentPoint(hdc, str, _tcslen(str), &size);
+	//	TextOut(hdc, 0, 0, str, _tcslen(str));
+	//SetCaretPos(size.cx, 0);
+		/*
+	격자 그리기 함수 DrawGrid() 구현
+	시작위치, 끝위치LeftTop, RightBottom .. RECTm POINT
+	DrawGrid(시작위치, 끝위치, 간격)
+	DrawGrid(중심위치, 간격, 선의 개수)
+	*/
+		RECT wRect;
+		GetClientRect(hWnd, &wRect);
+
+		POINT Gridpt = { 700, 400 };
+		DrawGrid(hdc, Gridpt.x, Gridpt.y, 10, 20, 100, 100);
 
 
-			hPen = CreatePen(PS_SOLID, 1, RGB(102, 153, 062));
-			oldPen = (HPEN)SelectObject(hdc, hPen);
-			hBrush = CreateSolidBrush(RGB(102, 153, 062));
-			oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-			POINT Rectanglept_ground = { 850, 800 };
-			int RectangleWidth_ground = 1700;
-			int RectangleHeight_ground = 300;
-			DrawRectangle(hdc, Rectanglept_ground.x, Rectanglept_ground.y, RectangleWidth_ground, RectangleHeight_ground);
-			SelectObject(hdc, oldBrush);
-			DeleteObject(hBrush);
-			SelectObject(hdc, oldPen);
-			DeleteObject(hPen);
+		hPen = CreatePen(PS_SOLID, 1, RGB(255, 234, 050));
+		oldPen = (HPEN)SelectObject(hdc, hPen);
+		hBrush = CreateSolidBrush(RGB(255, 234, 050));
+		oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+		RandomlyRotatedStars(hdc, howmanyStars, { 0,0 }, { 1700,900 }, 28, 5, stars);
+		DrawRandomlyRotatedStars(hdc, howmanyStars, stars);
+		SelectObject(hdc, oldBrush);
+		DeleteObject(hBrush);
+		SelectObject(hdc, oldPen);
+		DeleteObject(hPen);
 
 
-			hPen = CreatePen(PS_SOLID, 1, RGB(051, 204, 051));
-			oldPen = (HPEN)SelectObject(hdc, hPen);
-			hBrush = CreateSolidBrush(RGB(051, 204, 051));
-			oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-			POINT Rectanglept = { 300, 530 };
-			int RectangleWidth = 40;
-			int RectangleHeight = 280;
-			DrawRectangle(hdc, Rectanglept.x, Rectanglept.y, RectangleWidth, RectangleHeight); SelectObject(hdc, oldBrush);
-			SelectObject(hdc, oldBrush);
-			DeleteObject(hBrush);
-			SelectObject(hdc, oldPen);
-			DeleteObject(hPen);
+		//hPen = CreatePen(PS_SOLID, 1, RGB(102, 153, 062));
+		//oldPen = (HPEN)SelectObject(hdc, hPen);
+		//hBrush = CreateSolidBrush(RGB(102, 153, 062));
+		//oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+		//POINT Rectanglept_ground = { 850, 800 };
+		//int RectangleWidth_ground = 1700;
+		//int RectangleHeight_ground = 300;
+		//DrawRectangle(hdc, Rectanglept_ground.x, Rectanglept_ground.y, RectangleWidth_ground, RectangleHeight_ground);
+		//SelectObject(hdc, oldBrush);
+		//DeleteObject(hBrush);
+		//SelectObject(hdc, oldPen);
+		//DeleteObject(hPen);
 
 
-
-			//TextOut(hdc, Rectanglept.x, Rectanglept.y, _T("*"), _tcslen(_T("*")));
-			/*
-			DrawCircle이라는 함수 중심값, 반지름 받으면 만드는거
-			*/
-			POINT Circlept = { 300, 300 };
-			int CircleR = 100;
-			//DrawCircle(hdc, Circlept.x, Circlept.y, CircleR);
-			//TextOut(hdc, Circlept.x, Circlept.y, _T("*"), _tcslen(_T("*")));
-
-
-			hPen = CreatePen(PS_SOLID, 1, RGB(255, 204, 000));
-			oldPen = (HPEN)SelectObject(hdc, hPen);
-			hBrush = CreateSolidBrush(RGB(255, 204, 051));
-			oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-			SunFlower(hdc, Circlept.x, Circlept.y, CircleR, 14);
-			SelectObject(hdc, oldBrush);
-			DeleteObject(hBrush);
-			SelectObject(hdc, oldPen);
-			DeleteObject(hPen);
-
-
-			hPen = CreatePen(PS_SOLID, 1, RGB(102, 051, 000));
-			oldPen = (HPEN)SelectObject(hdc, hPen);
-			hBrush = CreateSolidBrush(RGB(153, 102, 000));
-			oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
-			DrawCircle(hdc, Circlept.x, Circlept.y, CircleR); DeleteObject(hBrush);
-			SelectObject(hdc, oldBrush);
-			DeleteObject(hBrush);	
-			SelectObject(hdc, oldPen);
-			DeleteObject(hPen);
-	
+		//hPen = CreatePen(PS_SOLID, 1, RGB(051, 204, 051));
+		//oldPen = (HPEN)SelectObject(hdc, hPen);
+		//hBrush = CreateSolidBrush(RGB(051, 204, 051));
+		//oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+		//POINT Rectanglept = { 300, 530 };
+		//int RectangleWidth = 40;
+		//int RectangleHeight = 280;
+		//DrawRectangle(hdc, Rectanglept.x, Rectanglept.y, RectangleWidth, RectangleHeight); SelectObject(hdc, oldBrush);
+		//SelectObject(hdc, oldBrush);
+		//DeleteObject(hBrush);
+		//SelectObject(hdc, oldPen);
+		//DeleteObject(hPen);
 
 
 
-			//POINT Starpt = { 1000, 500 };
-			//int StarR = 200;
-			//DrawStar(hdc, Starpt, StarR);
-
-			//DrawRotatedStars(hdc, 45, { 0,0 }, { 1500,130 }, 65, 5);
-
-
-
-			
-			DrawRectangle(hdc, 1250, 350, 100, 200);
-			DrawRectangle(hdc, 1050, 350, 100, 200);
-			DrawRectangle(hdc, 1150, 150, 100, 200);
-			DrawRectangle(hdc, 1150, 550, 100, 200);
-			TextOut(hdc, 1250, 350, _T("오른쪽"), _tcslen(_T("오른쪽")));
-			TextOut(hdc, 1150, 150, _T("위쪽"), _tcslen(_T("위쪽")));
-			TextOut(hdc, 1050, 350, _T("왼쪽"), _tcslen(_T("왼쪽")));
-			TextOut(hdc, 1150, 550, _T("아래쪽"), _tcslen(_T("아래쪽")));
+		////TextOut(hdc, Rectanglept.x, Rectanglept.y, _T("*"), _tcslen(_T("*")));
+		///*
+		//DrawCircle이라는 함수 중심값, 반지름 받으면 만드는거
+		//*/
+		//POINT Circlept = { 300, 300 };
+		//int CircleR = 100;
+		////DrawCircle(hdc, Circlept.x, Circlept.y, CircleR);
+		////TextOut(hdc, Circlept.x, Circlept.y, _T("*"), _tcslen(_T("*")));
 
 
-			SetTextColor(hdc, RGB(205, 122, 140));
-			RECT rc_text;
-			rc_text.left = 220;
-			rc_text.top = 280;
-			rc_text.right = 380;
-			rc_text.bottom = 320;
-			DrawRectText(hdc, rc_text, str);
+		//hPen = CreatePen(PS_SOLID, 1, RGB(255, 204, 000));
+		//oldPen = (HPEN)SelectObject(hdc, hPen);
+		//hBrush = CreateSolidBrush(RGB(255, 204, 051));
+		//oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+		//SunFlower(hdc, Circlept.x, Circlept.y, CircleR, 14);
+		//SelectObject(hdc, oldBrush);
+		//DeleteObject(hBrush);
+		//SelectObject(hdc, oldPen);
+		//DeleteObject(hPen);
+
+
+		//hPen = CreatePen(PS_SOLID, 1, RGB(102, 051, 000));
+		//oldPen = (HPEN)SelectObject(hdc, hPen);
+		//hBrush = CreateSolidBrush(RGB(153, 102, 000));
+		//oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+		//DrawCircle(hdc, Circlept.x, Circlept.y, CircleR); DeleteObject(hBrush);
+		//SelectObject(hdc, oldBrush);
+		//DeleteObject(hBrush);
+		//SelectObject(hdc, oldPen);
+		//DeleteObject(hPen);
+
+		//POINT Starpt = { 1000, 500 };
+		//int StarR = 200;
+		//DrawStar(hdc, Starpt, StarR);
+
+		//DrawRotatedStars(hdc, 45, { 0,0 }, { 1500,130 }, 65, 5);
+
+		//DrawRectangle(hdc, 1250, 350, 100, 200);
+		//DrawRectangle(hdc, 1050, 350, 100, 200);
+		//DrawRectangle(hdc, 1150, 150, 100, 200);
+		//DrawRectangle(hdc, 1150, 550, 100, 200);
+		//TextOut(hdc, 1250, 350, _T("오른쪽"), _tcslen(_T("오른쪽")));
+		//TextOut(hdc, 1150, 150, _T("위쪽"), _tcslen(_T("위쪽")));
+		//TextOut(hdc, 1050, 350, _T("왼쪽"), _tcslen(_T("왼쪽")));
+		//TextOut(hdc, 1150, 550, _T("아래쪽"), _tcslen(_T("아래쪽")));
+
+
+		//SetTextColor(hdc, RGB(205, 122, 140));
+		//RECT rc_text;
+		//rc_text.left = 220;
+		//rc_text.top = 280;
+		//rc_text.right = 380;
+		//rc_text.bottom = 320;
+		//DrawRectText(hdc, rc_text, str);
+
+		//POINT CircleMove{500, 500};
+		//int CircleMoveR = 100;
+		//	if (ptCircle.x + CircleMove.x + CircleMoveR > wRect.right )ptCircle.x -= moveptCircleSpeed;
+		//	if( ptCircle.x + CircleMove.x - CircleMoveR < wRect.left)ptCircle.x += moveptCircleSpeed;
+		//	if (ptCircle.y + CircleMove.y + CircleMoveR > wRect.bottom)ptCircle.y -= moveptCircleSpeed;
+		//	if(ptCircle.y + CircleMove.y - CircleMoveR < wRect.top)ptCircle.y += moveptCircleSpeed;
+		//	
+		//	DrawCircle(hdc, ptCircle.x + CircleMove.x, ptCircle.y + CircleMove.y,CircleMoveR);
+
+		//	POINT CircleTimer1{ 1000, 300 };
+		//	int CircleTimer1R = 75;
+		//	if (ptCircleTimer.x + CircleTimer1.x + CircleTimer1R > wRect.right)ptCircleTimer.x -= moveptCircleSpeed;
+		//	DrawCircle(hdc, ptCircleTimer.x+CircleTimer1.x, CircleTimer1.y, CircleTimer1R);
+		//	POINT CircleTimer2{ 1000, 300 };
+		//	int CircleTimer2R = 75;
+		//	if (ptCircleTimer.y + CircleTimer2.y + CircleTimer2R > wRect.bottom)ptCircleTimer.y -= moveptCircleSpeed;
+		//	DrawCircle(hdc, CircleTimer2.x,ptCircleTimer.y+ CircleTimer2.y, CircleTimer2R);
+
+			//hPen = CreatePen(PS_SOLID, 1, RGB(255, 128, 100));
+			//oldPen = (HPEN)SelectObject(hdc, hPen);
+			//POINT CircleClick{ 400,200 };
+			//int CircleClickR = 70;
+			//DrawCircle(hdc, ptCircleClick.x, ptCircleClick.y, CircleClickR);
+			//SelectObject(hdc, oldPen);
+			//DeleteObject(hPen);
+
+			//int CirclemMoveR = 100;
+			//DrawCircle(hdc, ptCirclemMove.x, ptCirclemMove.y, CirclemMoveR);
+
+//클라이언트 영역에 마우스 클릭하면 해당 위치에 원을 생성
+//임의 방향으로 이동/ 클라이언트 외곽에서 반사
+		if (j >= 0) {
+			for (int i = 0; i <= j; i++)
+			{
+				DrawCircle(hdc, circles[i]->GetPOINT().x + circles[i]->GetMPT().x,
+					circles[i]->GetPOINT().y + circles[i]->GetMPT().y, circles[i]->GetR());
+			}
+		}
 
 			EndPaint(hWnd, &ps);
         }
@@ -425,6 +617,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		DestroyCaret();
 		PostQuitMessage(0);
 		delete[] stars;
+
+
+		KillTimer(hWnd, 1);
+		KillTimer(hWnd, 2);
+		KillTimer(hWnd, 3);
+		
+		for (int i = 0; i < 50; i++)
+		{
+			delete circles[i];
+		}
+		delete circles;
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
