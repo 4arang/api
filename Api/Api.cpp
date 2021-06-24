@@ -39,8 +39,8 @@ void DrawRotatedStar(HDC hdc, POINT star, int r, double angle);
 Stars RandomlyRotatedStars(HDC hdc, int howmanyStars, POINT leftTop, POINT rightBottom, int maxSize, int minSize, Stars *stars);
 void DrawRandomlyRotatedStars(HDC hdc, int  howmanyStars, Stars  *stars);
 
-
-
+float GetDegree(float deg);
+float GetDegree(float a, float b);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -82,12 +82,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 class CShape
 {
-
+protected:
 	POINT PT;
 	POINT MovingPT;
-	int Speed = 10;
-	double Dir=0;
-	int R = 50;
+	int Speed = 24;
+	float Dir;
+	int R = 45;
 public:
 	//	CShape();
 	//	~CShape();
@@ -96,12 +96,15 @@ public:
 	POINT GetMPT() const { return MovingPT; }
 	void setMPT(POINT p) { MovingPT = p; }
 	int GetSpeed() const { return Speed; }
-	double GetDir() const { return Dir; }
-	void SetDir() { Dir = rand() % 360 * M_PI / 180; }
+	float GetDir() const { return Dir; }
+	void SetDir() { Dir = (rand() % 360) * M_PI / 180; }
+	void SetDir(float Dir_) { Dir = Dir_; }
 	int GetR() const { return R; }
+	void ChangeDir() { Dir = -Dir; }
+	bool CollisionCircle(CShape *other);
 
-	//	void update();
-	//	bool Collision();
+	virtual	void update() {}
+	virtual bool CollisionWall(RECT wRect) = 0;
 	virtual void DrawMe(HDC hdc) = 0;
 };
 
@@ -109,10 +112,15 @@ class CCircle :public CShape
 {
 	//CCircle() : R(R) {}
 public:
+	CCircle() : CShape() {}
 	void DrawMe(HDC hdc)
 	{
 		DrawCircle(hdc, GetPOINT().x, GetPOINT().y, GetR());
 	}
+	void update() { PT.x += cos(Dir) * Speed; PT.y +=sin(Dir)* Speed; }
+	bool CollisionWall(RECT wRect) { if (PT.x + R >= wRect.right || PT.x - R <= wRect.left
+		|| PT.y + R >= wRect.bottom || PT.y - R <= wRect.top) return true; }
+	//bool CollisionObject()
 };
 
 //
@@ -200,26 +208,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static BOOL bSelected = false;
 	static POINT ptCirclemMove;
 	
-
-
-
-
 	static int j = -1;
 
-
-	static	CShape **circles = new CShape*[50];
-	if (j == -1)
-	{
-		for (int i = 0; i < 50; i++)
-		{
-			circles[i] = new CCircle;
-		}
-	}
-
-
-
-
-
+	static	CShape *circles[50];
 
     switch (message)
     {
@@ -247,7 +238,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		SetTimer(hWnd, 1, 100, NULL); //타이머설정 아이디, 간격ms, 함수
 		SetTimer(hWnd, 2, 100, NULL);
-		SetTimer(hWnd, 3, 100, NULL);
+		SetTimer(hWnd, 3, 50, NULL);
 	}
 		break;
 	case WM_SIZE : // wParam, IParam(HIWORD: H, LOWORD:W)창 사이즈 변경값 입력시
@@ -380,8 +371,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case 3:
 		{
 			if (j >= 0) {
-				circles[j]->setMPT({ circles[j]->GetMPT().x + (int)cos(circles[j]->GetDir()) * circles[j]->GetSpeed(),
-				circles[j]->GetMPT().y+ (int)sin(circles[j]->GetDir()) * circles[j]->GetSpeed() });
+				for (int i = 0; i <= j; i++)
+				{
+					//circles[j]->SetPOINT({ circles[j]->GetPOINT().x + circles[j]->GetMPT().x,
+					//circles[j]->GetPOINT().y + circles[j]->GetMPT().y });
+					circles[i]->update();
+				}
 			}
 		}
 		break;
@@ -393,11 +388,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		j++;
 	//	hdc = GetDC(hWnd);
+		POINT p;
+		if (j >= 0)
+		{
+			
+			circles[j] = new CCircle();
+			circles[j]->SetDir();
+			p.x = cos(circles[j]->GetDir()) * circles[j]->GetSpeed();
+			p.y = sin(circles[j]->GetDir()) * circles[j]->GetSpeed();
 
-		circles[j]->SetPOINT({LOWORD(lParam), HIWORD(lParam)});
+			circles[j]->SetPOINT({ LOWORD(lParam), HIWORD(lParam) });
 
-		circles[j]->SetDir();
+			circles[j]->setMPT(p);
 
+		}
 		int breakpoint = 999;
 
 	//	bSelected = TRUE;
@@ -599,13 +603,38 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			//DrawCircle(hdc, ptCirclemMove.x, ptCirclemMove.y, CirclemMoveR);
 
 //클라이언트 영역에 마우스 클릭하면 해당 위치에 원을 생성
-//임의 방향으로 이동/ 클라이언트 외곽에서 반사
+//임의 방향으로 이동/ 클라이언트 외곽에서 반사\/
+//1번 부딪히면 합체 2번 부딪히면 쪼개지게
+//랜덤으로 원 별 사각형이 그려지게
+//서로 충돌할때 상성고려해서 같으면 팅기고 다르면 그 관계정해진대로 ㄱㄱ
 		if (j >= 0) {
 			for (int i = 0; i <= j; i++)
 			{
-				DrawCircle(hdc, circles[i]->GetPOINT().x + circles[i]->GetMPT().x,
-					circles[i]->GetPOINT().y + circles[i]->GetMPT().y, circles[i]->GetR());
+				if (circles[i]->CollisionWall(wRect) == 1)
+				{
+					if (circles[i]->GetPOINT().y + circles[i]->GetR() >= wRect.bottom ||
+						circles[i]->GetPOINT().y - circles[i]->GetR() <= wRect.top)
+						circles[i]->SetDir(-circles[i]->GetDir());
+					else
+						circles[i]->SetDir(-circles[i]->GetDir()-M_PI);
+				}
+				for (int k = 0; k <= j; k++)
+				{
+					if (k != i) {
+						if (circles[i]->CollisionCircle(circles[k]) == 1)
+						{
+							circles[i]->SetDir();
+							circles[k]->SetDir();
+							//circles[i]->SetDir(GetDegree(circles[i]->GetDir(), circles[k]->GetDir()));
+							//circles[k]->SetDir(GetDegree(circles[k]->GetDir(), circles[i]->GetDir()));
+						/*circles[i]->SetDir(circles[i]->GetDir() - abs(circles[i]->GetDir() - GetDegree(circles[k]->GetDir() + M_PI)) * 2);
+							circles[k]->SetDir(circles[k]->GetDir() - abs(circles[k]->GetDir() - GetDegree(circles[i]->GetDir() + M_PI)) * 2);*/
+						}
+					}
+				}
+				DrawCircle(hdc, circles[i]->GetPOINT().x, circles[i]->GetPOINT().y, circles[i]->GetR());
 			}
+
 		}
 
 			EndPaint(hWnd, &ps);
@@ -623,11 +652,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		KillTimer(hWnd, 2);
 		KillTimer(hWnd, 3);
 		
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i <= j; i++)
 		{
 			delete circles[i];
 		}
-		delete circles;
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -799,4 +827,31 @@ void DrawRandomlyRotatedStars(HDC hdc,int  howmanyStars,Stars  *stars)
 	{
 		DrawRotatedStar(hdc, stars[i].star, stars[i].r, stars[i].angle);
 	}
+}
+bool CShape:: CollisionCircle( CShape *other)
+{
+	float a = this->PT.x - other->PT.x;
+	float b = this->PT.y - other->PT.y;
+	
+	float length = sqrt(a*a + b * b);
+
+	if (length <= (this->R + other->R))
+		return TRUE;
+}
+float GetDegree(float deg)
+{
+	if (deg < 0)
+		deg += 2*M_PI;
+	if (deg > 2*M_PI)
+		deg -= 2*M_PI;
+
+	return deg;
+}
+float GetDegree(float a, float b)
+{
+	if (a > b + M_PI)
+		return (a - (a - GetDegree(b + M_PI)));
+	else
+		return (GetDegree(b + M_PI) - (GetDegree(b + M_PI) - a));
+
 }
