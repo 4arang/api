@@ -1,6 +1,6 @@
 ﻿// Api.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
-
+#include "resource.h"
 #include "framework.h"
 #include "Api.h"
 #include <TCHAR.H>
@@ -10,6 +10,8 @@
 #include <math.h>
 #define MAX_LOADSTRING 100
 #include <list>
+#include <commdlg.h>
+
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
@@ -187,13 +189,59 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY  - 종료 메시지를 게시하고 반환합니다.
 //
 //
+
+void OutFromFile(TCHAR filename[], HWND hWnd)
+{
+	FILE *fPtr;
+	HDC hdc;
+	int line;
+	TCHAR buffer[500];
+	line = 0;
+	hdc = GetDC(hWnd);
+#ifdef _UNICODE
+	_tfopen_s(&fPtr, filename, _T("r, ccs = UNICODE"));
+#else
+	_tfopen_s(&fPtr, filename, _T("r"));
+#endif
+	while (_fgetts(buffer, 100, fPtr) != NULL)
+	{
+		if (buffer[_tcslen(buffer) - 1] == _T('\n'))
+			buffer[_tcslen(buffer) - 1] = NULL;
+		TextOut(hdc, 0, line * 20, buffer, _tcslen(buffer));
+		line++;
+	}
+	fclose(fPtr);
+	ReleaseDC(hWnd, hdc);
+}
+
+
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	//typedef struct {
+	//	DWORD lStructSize;
+	//	HWND hwndOwner;
+	//	HWND hInstance;
+	//	COLORREF rgbResult;
+	//	COLORREF *lpCustColors;
+	//	DWORD Flags;
+	//	LPARAM lCustData;
+	//	LPCCHOOKPROC lpfnHook;
+	//	LPCTSTR lpTemplateName;
+	//}CHOOSECOLOR, *LPCHOOSECOLOR;
+
+	OPENFILENAME OFN;
+	TCHAR str2[100], lpstrFile[100] = _T("");
+	TCHAR filter[] = _T("Every File(*.*)\0 * .*\0Text File\0 * .txt;*.doc\0");
 	HDC hdc;
-	
+	CHOOSECOLOR COLOR;
+	static COLORREF tmp[16], color;
+	HBRUSH hBrush, OldBrush;
+	int ii;
+
 //	static bool bKeyDown = false;
 	HPEN hPen, oldPen;
-	HBRUSH hBrush,oldBrush;
+	HBRUSH hBrush1,oldBrush;
 
 	static TCHAR str[100];
 	static int count = 0;
@@ -212,6 +260,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	static	CShape *circles[50];
 
+	
+
+
+
+
     switch (message)
     {
     case WM_COMMAND:
@@ -220,24 +273,80 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // 메뉴 선택을 구문 분석합니다:
             switch (wmId)
             {
+			case ID_FILEOPEN:
+				memset(&OFN, 0, sizeof(OPENFILENAME));
+				OFN.lStructSize = sizeof(OPENFILENAME);
+				OFN.hwndOwner = hWnd;
+				OFN.lpstrFilter = filter;
+				OFN.lpstrFile = lpstrFile;
+				OFN.nMaxFile = 100;
+				OFN.lpstrInitialDir = _T(".");
+				if (GetOpenFileName(&OFN) != 0)
+				{
+					_stprintf_s(str2, _T("%s 파일을 열겠습니까?"), OFN.lpstrFile);
+					MessageBox(hWnd, str2, _T("열기 선택"), MB_OK);
+					OutFromFile(OFN.lpstrFile, hWnd);
+				}
+				break;
+			case ID_COLORDLG:
+				for (ii = 0; ii < 16; ii++)
+					tmp[ii] = RGB(rand() % 256, rand() % 256, rand() % 256);
+				memset(&COLOR, 0, sizeof(CHOOSECOLOR));
+				COLOR.lStructSize = sizeof(CHOOSECOLOR);
+				COLOR.hwndOwner = hWnd;
+				COLOR.lpCustColors = tmp;
+				COLOR.Flags = CC_FULLOPEN;
+				if (ChooseColor(&COLOR) != 0)
+				{
+
+					color = COLOR.rgbResult;
+					InvalidateRgn(hWnd, NULL, TRUE);
+				}
+
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
             case IDM_EXIT:
                 DestroyWindow(hWnd);
                 break;
+			case ID_FUNC1:
+				DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+				break;
+			case ID_FUNC2:
+				DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+				break;
+			case ID_FUNC3:
+			{
+				int ans = MessageBox(hWnd, _T("기능 선택 확인버튼"), _T("기능선택"), MB_YESNOCANCEL);
+				switch (ans)
+				{
+				case IDYES:
+					MessageBox(hWnd, _T("YES버튼 선택"), _T("버튼확인"), MB_OK);
+					break;
+				case IDNO:
+					MessageBox(hWnd, _T("NO 버튼 선택"), _T("버튼확인"), MB_OK);
+					break;
+				case IDCANCEL:
+					MessageBox(hWnd, _T("CANCEL 버튼 선택"), _T("버튼확인"), MB_OK);
+					break;
+				default:
+					break;
+				}
+			}
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
+
         }
         break;
+
 	case WM_CREATE :
 	{
 		CreateCaret(hWnd, NULL, 5, 15);
 		ShowCaret(hWnd);
 
-		SetTimer(hWnd, 1, 100, NULL); //타이머설정 아이디, 간격ms, 함수
-		SetTimer(hWnd, 2, 100, NULL);
+		//SetTimer(hWnd, 1, 100, NULL); //타이머설정 아이디, 간격ms, 함수
+		//SetTimer(hWnd, 2, 100, NULL);
 		SetTimer(hWnd, 3, 50, NULL);
 	}
 		break;
@@ -636,6 +745,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 
 		}
+
+
+		hBrush = CreateSolidBrush(color);
+		OldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+		Ellipse(hdc, 10, 10, 200, 200);
+		SelectObject(hdc, OldBrush);
+		DeleteObject(hBrush);
 
 			EndPaint(hWnd, &ps);
         }
