@@ -388,6 +388,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_KEYDOWN:
 	{
 		hdc = GetDC(hWnd);
+
 		if (wParam == VK_RIGHT)
 		{
 			hBrush = CreateSolidBrush(RGB(255, 100, 100));
@@ -432,6 +433,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			ptCircle.y += moveptCircleSpeed;
 		
 		}
+		//else if(wParam == )
 		InvalidateRect(hWnd, NULL, TRUE);
 		ReleaseDC(hWnd, hdc);
 	}

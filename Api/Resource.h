@@ -1,6 +1,6 @@
-ï»¿//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ì—ì„œ ìƒì„±í•œ í¬í•¨ íŒŒì¼ì…ë‹ˆë‹¤.
-// Api.rcì—ì„œ ì‚¬ìš©ë˜ê³  ìˆìŠµë‹ˆë‹¤.
+//{{NO_DEPENDENCIES}}
+// Microsoft Visual C++¿¡¼­ »ı¼ºÇÑ Æ÷ÇÔ ÆÄÀÏÀÔ´Ï´Ù.
+// Api.rc¿¡¼­ »ç¿ëµÇ°í ÀÖ½À´Ï´Ù.
 //
 #define IDC_MYICON                      2
 #define IDD_API_DIALOG                  102
@@ -26,6 +26,9 @@
 #define ID_FILEOPEN                     32781
 #define ID_32782                        32782
 #define ID_COLORDLG                     32783
+#define ID_32784                        32784
+#define ID_32785                        32785
+#define ID_ACCELERATOR32790             32790
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
@@ -34,7 +37,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        130
-#define _APS_NEXT_COMMAND_VALUE         32784
+#define _APS_NEXT_COMMAND_VALUE         32792
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
