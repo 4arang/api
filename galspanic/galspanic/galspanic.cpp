@@ -14,6 +14,9 @@ using namespace Gdiplus;
 #pragma comment(lib, "msimg32.lib") //특정 color 빼려고 포함시킴
 #define MAX_LOADSTRING 100
 
+
+
+
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
@@ -461,7 +464,7 @@ void OnGdi_Paint(HDC hdc)
 
 
 	GraphicsPath path;
-	Region newregion(&path);
+	static Region newregion(&path);
 	//path.AddLine(50, 150, 150, 180);
 	//path.AddLine(150, 180, 200, 240);
 	//graphics.DrawPath(&pen, &path);
@@ -470,7 +473,7 @@ void OnGdi_Paint(HDC hdc)
 	//{
 	//	goBackToArea();
 	//}
-
+	static int check;
 	 if (mpi - 2 >= 0) {
 		 //mypath.AddLine(mp[mpi-1].GetPoint().x, mp[mpi - 1].GetPoint().y,
 		 //mp[mpi].GetPoint().x, mp[mpi].GetPoint().y); //mypath에 새좌표 line 추가
@@ -490,9 +493,9 @@ void OnGdi_Paint(HDC hdc)
   			 newregion.Complement(&mypath);
 			 /*myRegion[myRegioni].Complement(&mypath);
 			 myRegioni++;*/
-		
+			 check=0;
 		 }
-
+		 
 	/*	 if(myRegioni>=1)
 		 VisibleArea.Union(&myRegion[myRegioni - 1]);*/
 		 
