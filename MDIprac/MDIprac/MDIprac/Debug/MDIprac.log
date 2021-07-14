@@ -1,0 +1,4 @@
+﻿  MDIprac.cpp
+d:\api\mdiprac\mdiprac\mdiprac\mdiprac.cpp(269): warning C4101: 'hBtn' :참조되지 않은 지역 변수입니다.
+d:\api\mdiprac\mdiprac\mdiprac\mdiprac.cpp(361): warning C4060: switch문에 'case' 또는 'default' 레이블이 없습니다.
+  MDIprac.vcxproj -> D:\api\MDIprac\MDIprac\Debug\MDIprac.exe

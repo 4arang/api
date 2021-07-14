@@ -1,0 +1,4 @@
+﻿  APIpr2.cpp
+d:\api\apipr2\apipr2\apipr2.cpp(494): warning C4244: '인수': 'int'에서 'Gdiplus::REAL'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\apipr2\apipr2\apipr2.cpp(498): warning C4244: '인수': 'int'에서 'Gdiplus::REAL'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  APIpr2.vcxproj -> D:\api\APIpr2\Debug\APIpr2.exe
