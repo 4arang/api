@@ -1,22 +1,22 @@
 ﻿  APIpractice.cpp
-d:\api\api\apipractice\apipractice\apipractice.cpp(748): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\api\api\apipractice\apipractice\apipractice.cpp(749): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(765): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(793): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(848): warning C4838: 'double'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(848): warning C4244: '초기화 중': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(750): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(766): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(794): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\api\api\apipractice\apipractice\apipractice.cpp(849): warning C4838: 'double'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
 d:\api\api\apipractice\apipractice\apipractice.cpp(849): warning C4244: '초기화 중': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(851): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(874): warning C4838: 'double'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(874): warning C4244: '초기화 중': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(882): warning C4244: '+=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(883): warning C4244: '-=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(886): warning C4244: '-=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(887): warning C4244: '+=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(908): warning C4101: 'size' :참조되지 않은 지역 변수입니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(337): warning C4715: 'CONTROL_Proc': 모든 제어 경로에서 값을 반환하지는 않습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(416): warning C4715: 'MyDlg_Proc': 모든 제어 경로에서 값을 반환하지는 않습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(303): error C4700: 초기화되지 않은 'hList' 지역 변수를 사용했습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(896): warning C4715: 'CMissile::CollisionEnemy': 모든 제어 경로에서 값을 반환하지는 않습니다.
-d:\api\api\apipractice\apipractice\apipractice.cpp(902): warning C4715: 'CEnemy::CollisionEnemy': 모든 제어 경로에서 값을 반환하지는 않습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(850): warning C4838: 'double'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(850): warning C4244: '초기화 중': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(852): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(875): warning C4838: 'double'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(875): warning C4244: '초기화 중': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(883): warning C4244: '+=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(884): warning C4244: '-=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(887): warning C4244: '-=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(888): warning C4244: '+=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(909): warning C4101: 'size' :참조되지 않은 지역 변수입니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(338): warning C4715: 'CONTROL_Proc': 모든 제어 경로에서 값을 반환하지는 않습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(417): warning C4715: 'MyDlg_Proc': 모든 제어 경로에서 값을 반환하지는 않습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(897): warning C4715: 'CMissile::CollisionEnemy': 모든 제어 경로에서 값을 반환하지는 않습니다.
+d:\api\api\apipractice\apipractice\apipractice.cpp(903): warning C4715: 'CEnemy::CollisionEnemy': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  APIpractice.vcxproj -> D:\api\api\APIpractice\Debug\APIpractice.exe
