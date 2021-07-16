@@ -1,24 +1,24 @@
 ﻿  Api.cpp
 d:\api\api\api\api.cpp(103): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\api\api\api\api.cpp(123): warning C4244: '+=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(507): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(508): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(729): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(509): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(510): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(731): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 d:\api\api\api\api.cpp(245): warning C4101: 'hBrush1' :참조되지 않은 지역 변수입니다.
-d:\api\api\api\api.cpp(836): warning C4838: 'double'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
-d:\api\api\api\api.cpp(836): warning C4244: '초기화 중': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(838): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(844): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(851): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(852): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(879): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(907): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(950): warning C4244: '초기화 중': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(951): warning C4244: '초기화 중': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(961): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
-d:\api\api\api\api.cpp(963): warning C4305: '-=': 'double'에서 'float'(으)로 잘립니다.
-d:\api\api\api\api.cpp(970): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(838): warning C4838: 'double'에서 'LONG'(으)로의 변환에는 축소 변환이 필요합니다.
+d:\api\api\api\api.cpp(838): warning C4244: '초기화 중': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(840): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(846): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(853): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(854): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(881): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(909): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(952): warning C4244: '초기화 중': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(953): warning C4244: '초기화 중': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(963): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
+d:\api\api\api\api.cpp(965): warning C4305: '-=': 'double'에서 'float'(으)로 잘립니다.
 d:\api\api\api\api.cpp(972): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\api\api.cpp(957): warning C4715: 'CShape::CollisionCircle': 모든 제어 경로에서 값을 반환하지는 않습니다.
+d:\api\api\api\api.cpp(974): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\api\api.cpp(959): warning C4715: 'CShape::CollisionCircle': 모든 제어 경로에서 값을 반환하지는 않습니다.
 d:\api\api\api\api.cpp(125): warning C4715: 'CCircle::CollisionWall': 모든 제어 경로에서 값을 반환하지는 않습니다.
   Api.vcxproj -> D:\api\api\Debug\Api.exe
