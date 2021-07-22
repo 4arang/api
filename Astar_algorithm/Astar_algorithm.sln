@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1525
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Astar_algorithm", "Astar_algorithm\Astar_algorithm.vcxproj", "{E0B39E3F-B51F-42B6-92EF-45C96CF21167}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0B39E3F-B51F-42B6-92EF-45C96CF21167}.Debug|x64.ActiveCfg = Debug|x64
+		{E0B39E3F-B51F-42B6-92EF-45C96CF21167}.Debug|x64.Build.0 = Debug|x64
+		{E0B39E3F-B51F-42B6-92EF-45C96CF21167}.Debug|x86.ActiveCfg = Debug|Win32
+		{E0B39E3F-B51F-42B6-92EF-45C96CF21167}.Debug|x86.Build.0 = Debug|Win32
+		{E0B39E3F-B51F-42B6-92EF-45C96CF21167}.Release|x64.ActiveCfg = Release|x64
+		{E0B39E3F-B51F-42B6-92EF-45C96CF21167}.Release|x64.Build.0 = Release|x64
+		{E0B39E3F-B51F-42B6-92EF-45C96CF21167}.Release|x86.ActiveCfg = Release|Win32
+		{E0B39E3F-B51F-42B6-92EF-45C96CF21167}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD262A5E-9A45-475F-B073-9ADC9CD13C0D}
+	EndGlobalSection
+EndGlobal
