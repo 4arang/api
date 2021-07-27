@@ -17,6 +17,12 @@ typedef struct _tagRectangle
 
 //플레이어 총알
 list<RECTANGLE> g_PlayerBulletList;
+typedef struct _tagBullet
+{
+	RECTANGLE rc;
+	float fDist;
+	float fLimit;
+}BULLET;
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
@@ -93,6 +99,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		//윈도우 데드타임일 경우
 		else
 		{
+
 			Run();
 		}
     }
@@ -260,6 +267,7 @@ void Run()
 	float fSpeed = 300 * g_fDeltaTime;
 
 
+
 	if (GetAsyncKeyState('D') & 0x8000)
 	{
 		g_tPlayerRC.l += fSpeed;
@@ -300,6 +308,7 @@ void Run()
 		g_tPlayerRC.t = 500;
 		g_tPlayerRC.b = 600;
 	}
+
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 	{
 		RECTANGLE rcBullet;
@@ -307,14 +316,35 @@ void Run()
 		rcBullet.r = g_tPlayerRC.r + 50.f;
 		rcBullet.t = (g_tPlayerRC.t + g_tPlayerRC.b) / 2.f - 25.f;
 		rcBullet.b = rcBullet.t + 50.f;
-	
-		list<RECTANGLE>::iterator iter;
-		list<RECTANGLE>::iterator iterEnd = g_PlayerBulletList.end();
 
-		for (iter = g_PlayerBulletList.begin(); iter != iterEnd; ++iter)
-		{
-			Rectangle(g_hDC, (*iter).l, (*iter).t, (*iter).r, (*iter).b);
-		}
+		g_PlayerBulletList.push_back(rcBullet);
 	}
+	
+	
 	Rectangle(g_hDC, g_tPlayerRC.l, g_tPlayerRC.t, g_tPlayerRC.r, g_tPlayerRC.b);
+
+	list<RECTANGLE>::iterator iter;
+	list<RECTANGLE>::iterator iterEnd = g_PlayerBulletList.end();
+
+	fSpeed = 500.f*g_fDeltaTime*fTimeSacle;
+
+	for (iter = g_PlayerBulletList.begin(); iter != iterEnd; ++iter)
+	{
+		(*iter).l += fSpeed;
+		(*iter).r += fSpeed;
+
+		if ((*iter).l >= 800)
+		{
+			iter = g_PlayerBulletList.erase(iter);
+			iterEnd = g_PlayerBulletList.end();
+		}
+		else
+			++iter;
+	}
+
+	for (iter = g_PlayerBulletList.begin(); iter != iterEnd; ++iter)
+	{
+		Rectangle(g_hDC, (*iter).l, (*iter).t, (*iter).r, (*iter).b);
+	}
+
 }
