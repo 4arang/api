@@ -3,17 +3,17 @@
 
 #include "framework.h"
 #include "ElectionGame.h"
-#include <gdiplus.h>
-#pragma comment(lib, "Gdiplus.lib")
-using namespace Gdiplus;
+//#include <gdiplus.h>
+//#pragma comment(lib, "Gdiplus.lib")
+//using namespace Gdiplus;
 
 
 #define MAX_LOADSTRING 100
-#pragma comment(lib, "msimg32.lib") //특정 color 빼려고 포함시킴
+//#pragma comment(lib, "msimg32.lib") //특정 color 빼려고 포함시킴
 
-//Back Image
-VOID CALLBACK AniProc(HWND hWnd, UINT uMsg, UINT idEvenet, DWORD dwTime);
-void CreateBitmap();
+////Back Image
+//VOID CALLBACK AniProc(HWND hWnd, UINT uMsg, UINT idEvenet, DWORD dwTime);
+//void CreateBitmap();
 
 
 // 전역 변수:
@@ -139,9 +139,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
 	case WM_CREATE:
 	{
-		SetTimer(hWnd, 1, 100, AniProc);
-		GetClientRect(hWnd, &RectView);
-		CreateBitmap();
+		//SetTimer(hWnd, 1, 100, AniProc);
+		//GetClientRect(hWnd, &RectView);
+		//CreateBitmap();
 	}
 	break;
     case WM_COMMAND:
@@ -178,49 +178,49 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// 정보 대화 상자의 메시지 처리기입니다.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    UNREFERENCED_PARAMETER(lParam);
-    switch (message)
-    {
-    case WM_INITDIALOG:
-        return (INT_PTR)TRUE;
-
-    case WM_COMMAND:
-        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-        {
-            EndDialog(hDlg, LOWORD(wParam));
-            return (INT_PTR)TRUE;
-        }
-        break;
-    }
-    return (INT_PTR)FALSE;
-}
-
-void CreateBitmap()
-{
-
-	//>>:back image
-	hBackImage = (HBITMAP)LoadImage(NULL, TEXT("images/map1.bmp")
-		, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	GetObject(hBackImage, sizeof(BITMAP), &bitBack);
-	//<<:
-		//8way
-	h8wayImage = (HBITMAP)LoadImage(NULL, TEXT("images/8wayCharacter.bmp")
-		, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	GetObject(h8wayImage, sizeof(BITMAP), &bit8way);
-	RUN_FRAME_MAX = bit8way.bmWidth / SPRITE_SIZE_X2 - 1;
-	RUN_FRAME_MIN = 2;
-	curframe = RUN_FRAME_MIN;
-
-	ptAni2.x = rectView.right / 2;
-	ptAni2.y = rectView.bottom / 2;
-}
-VOID CALLBACK AniProc(HWND hWnd, UINT uMsg, UINT idEvenet, DWORD dwTime)
-{
-	curframe++;
-	if (curframe > RUN_FRAME_MAX)
-		curframe = RUN_FRAME_MIN;
-	InvalidateRect(hWnd, NULL, false); //false true로 놓으면 해결하긴하는데 다시그려야되서 별로
-}
+//// 정보 대화 상자의 메시지 처리기입니다.
+//INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+//{
+//    UNREFERENCED_PARAMETER(lParam);
+//    switch (message)
+//    {
+//    case WM_INITDIALOG:
+//        return (INT_PTR)TRUE;
+//
+//    case WM_COMMAND:
+//        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+//        {
+//            EndDialog(hDlg, LOWORD(wParam));
+//            return (INT_PTR)TRUE;
+//        }
+//        break;
+//    }
+//    return (INT_PTR)FALSE;
+//}
+//
+//void CreateBitmap()
+//{
+//
+//	//>>:back image
+//	hBackImage = (HBITMAP)LoadImage(NULL, TEXT("images/map1.bmp")
+//		, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+//	GetObject(hBackImage, sizeof(BITMAP), &bitBack);
+//	//<<:
+//		//8way
+//	h8wayImage = (HBITMAP)LoadImage(NULL, TEXT("images/8wayCharacter.bmp")
+//		, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+//	GetObject(h8wayImage, sizeof(BITMAP), &bit8way);
+//	RUN_FRAME_MAX = bit8way.bmWidth / SPRITE_SIZE_X2 - 1;
+//	RUN_FRAME_MIN = 2;
+//	curframe = RUN_FRAME_MIN;
+//
+//	ptAni2.x = rectView.right / 2;
+//	ptAni2.y = rectView.bottom / 2;
+//}
+//VOID CALLBACK AniProc(HWND hWnd, UINT uMsg, UINT idEvenet, DWORD dwTime)
+//{
+//	curframe++;
+//	if (curframe > RUN_FRAME_MAX)
+//		curframe = RUN_FRAME_MIN;
+//	InvalidateRect(hWnd, NULL, false); //false true로 놓으면 해결하긴하는데 다시그려야되서 별로
+//}

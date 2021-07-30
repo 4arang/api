@@ -1,4 +1,4 @@
 ﻿  sampleGame.cpp
-d:\api\api\samplegame\samplegame\samplegame.cpp(318): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\api\api\samplegame\samplegame\samplegame.cpp(340): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\samplegame\samplegame\samplegame.cpp(324): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+d:\api\api\samplegame\samplegame\samplegame.cpp(347): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   sampleGame.vcxproj -> D:\api\api\sampleGame\Debug\sampleGame.exe
