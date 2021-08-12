@@ -1,6 +1,1 @@
-﻿  galspanic.cpp
-d:\api\api\galspanic\galspanic\galspanic.cpp(311): warning C4101: 'hOldBitmap' :참조되지 않은 지역 변수입니다.
-d:\api\api\galspanic\galspanic\galspanic.cpp(310): warning C4101: 'hMemDC' :참조되지 않은 지역 변수입니다.
-d:\api\api\galspanic\galspanic\galspanic.cpp(312): warning C4101: 'by' :참조되지 않은 지역 변수입니다.
-d:\api\api\galspanic\galspanic\galspanic.cpp(312): warning C4101: 'bx' :참조되지 않은 지역 변수입니다.
-  galspanic.vcxproj -> D:\api\api\galspanic\Debug\galspanic.exe
+﻿
